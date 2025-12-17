@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Truck, Clock, ShieldCheck, X, ArrowRight } from 'lucide-react';
-import PublicNavbar from '../components/layout/PublicNavbar';
+
 
 export default function Home() {
     const [showPopup, setShowPopup] = useState(false);
@@ -16,13 +16,13 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-white font-sans text-slate-800">
-            <PublicNavbar />
+            {/* REMOVE this line: <PublicNavbar /> */}
 
             {/* Hero Section */}
             <header className="relative pt-32 pb-40 lg:pt-48 lg:pb-64 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="/hero-image.png"
+                        src="/hero-image.png"  // We'll fix this below
                         alt="Laundry Service"
                         className="w-full h-full object-cover opacity-90 brightness-75"
                     />
@@ -98,7 +98,7 @@ export default function Home() {
                             </div>
                             <h3 className="text-2xl font-bold text-slate-900 mb-4">Quality Guarantee</h3>
                             <p className="text-slate-500 leading-relaxed">
-                                If you're not 100% satisfied with our cleaning, we will re-wash your clothes for free. No questions asked.
+                                Not happy with the results? We will re-wash your clothes for free. No questions asked.
                             </p>
                         </div>
                     </div>
@@ -114,7 +114,7 @@ export default function Home() {
                             <div className="relative rounded-3xl overflow-hidden shadow-2xl skew-y-1 transform hover:skew-y-0 transition-transform duration-500">
                                 <div className="absolute inset-0 bg-teal-500 mix-blend-color opacity-20"></div>
                                 <img
-                                    src="/feature-smell.png"
+                                    src="/feature-smell.png"  // We'll fix this below
                                     alt="Fresh Scent"
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                                 />
@@ -137,7 +137,7 @@ export default function Home() {
                             <div className="relative rounded-3xl overflow-hidden shadow-2xl -skew-y-1 transform hover:skew-y-0 transition-transform duration-500">
                                 <div className="absolute inset-0 bg-blue-500 mix-blend-color opacity-20"></div>
                                 <img
-                                    src="/feature-thumbs.png"
+                                    src="/feature-thumbs.png"  // We'll fix this below
                                     alt="Expert Care"
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                                 />

@@ -1,11 +1,14 @@
+// src/components/PublicNavbar.jsx
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import LoginSelectionModal from '../auth/LoginSelectionModal';
+// Remove this line:
+// import LoginSelectionModal from '../auth/LoginSelectionModal';
 
 export default function PublicNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
+    // Remove this line:
+    // const [showLoginModal, setShowLoginModal] = useState(false);
     const location = useLocation();
 
     const isActive = (path) => location.pathname === path;
@@ -45,13 +48,13 @@ export default function PublicNavbar() {
 
                     {/* Auth Buttons */}
                     <div className="hidden md:flex items-center gap-4">
-                        <button
-                            onClick={() => setShowLoginModal(true)}
+                        <Link
+                            to="/login"
                             className="px-5 py-2.5 text-blue-600 font-semibold hover:bg-blue-50 rounded-lg transition-all"
                         >
                             Login
-                        </button>
-                        <Link to="/login" className="px-6 py-2.5 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                        </Link>
+                        <Link to="/register" className="px-6 py-2.5 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
                             Register
                         </Link>
                     </div>
@@ -77,23 +80,25 @@ export default function PublicNavbar() {
                         <Link to="/contact" className="text-gray-600 font-medium p-2 hover:bg-gray-50 rounded-lg">Contact</Link>
                         <Link to="/faq" className="text-gray-600 font-medium p-2 hover:bg-gray-50 rounded-lg">FAQ</Link>
                         <hr />
-                        <button
-                            onClick={() => {
-                                setIsMenuOpen(false);
-                                setShowLoginModal(true);
-                            }}
+                        <Link
+                            to="/login"
                             className="text-center w-full py-3 bg-blue-50 text-blue-600 font-bold rounded-lg"
+                            onClick={() => setIsMenuOpen(false)}
                         >
                             Login
-                        </button>
-                        <Link to="/login" className="text-center w-full py-3 bg-blue-600 text-white font-bold rounded-lg">Register</Link>
+                        </Link>
+                        <Link to="/register" className="text-center w-full py-3 bg-blue-600 text-white font-bold rounded-lg">
+                            Register
+                        </Link>
                     </div>
                 </div>
             )}
-            <LoginSelectionModal
+
+            {/* Remove this entire block since the modal is gone */}
+            {/* <LoginSelectionModal
                 isOpen={showLoginModal}
                 onClose={() => setShowLoginModal(false)}
-            />
+            /> */}
         </nav>
     );
 }
