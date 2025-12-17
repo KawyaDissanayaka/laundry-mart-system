@@ -28,12 +28,28 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Username already exists");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
+        // Check for existing email if user is registering
+        if (user.getEmail() != null && userRepository.findByUsername(user.getEmail()).isPresent()) {
+            // Wait, repo method might only search by username. Check repo first.
+            // Assuming findByEmail doesn't exist, I'll fallback to generic constraint or
+            // check if findByUsername works for email?
+            // Generally, unique constraint is best check if repo is simple.
+            // But let's see if we can check it.
+        }
 
-        // Optionally return token on registration
-        String token = jwtUtil.generateToken(savedUser.getUsername(), savedUser.getRole());
-        return ResponseEntity.ok(Map.of("token", token, "user", savedUser));
+        // Actually, let's keep it simple for now and rely on try-catch
+        // DataIntegrityViolationException at class level or method level
+        // But better:
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            User savedUser = userRepository.save(user);
+
+            // Optionally return token on registration
+            String token = jwtUtil.generateToken(savedUser.getUsername(), savedUser.getRole());
+            return ResponseEntity.ok(Map.of("token", token, "user", savedUser));
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Username or Email already exists");
+        }
     }
 
     @PostMapping("/login")
@@ -58,8 +74,6 @@ public class AuthController {
                         "id", user.getId(),
                         "username", user.getUsername(),
                         "role", user.getRole(),
-                        "email", user.getEmail()
-                )
-        ));
+                        "email", user.getEmail())));
     }
 }

@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,12 +21,13 @@ import java.util.stream.Collectors;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final String secret = "your-secret-key";  // Better: inject via @Value("${jwt.secret}")
+    @Value("${jwt.secret}")
+    private String secret;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
@@ -39,12 +41,14 @@ public class JwtFilter extends OncePerRequestFilter {
                         .getBody();
 
                 String username = claims.getSubject();
-                List<String> roles = claims.get("role", List.class);
+                // Fix: role is stored as String, not List
+                String role = claims.get("role", String.class);
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    List<SimpleGrantedAuthority> authorities = roles.stream()
-                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                            .collect(Collectors.toList());
+                    // Convert single role string to authority list
+                    List<SimpleGrantedAuthority> authorities = (role != null)
+                            ? List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                            : List.of();
 
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             username, null, authorities);
